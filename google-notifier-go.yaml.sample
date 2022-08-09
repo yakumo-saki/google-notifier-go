@@ -1,5 +1,0 @@
-config:
-  logLevel: "DEBUG"
-  scanSecond: 15
-  excludes:
-    - "AMZNFIRETV"

@@ -1,11 +1,13 @@
 package config
 
-import "os"
+import "strings"
 
-func getenv(envName, defaultValue string) string {
-	env := os.Getenv(envName)
-	if env == "" {
-		return defaultValue
+func IsIgnoredInstance(instance string) bool {
+	for _, v := range Config.Devices.ExcludeByInstance {
+		if strings.EqualFold(instance, v) {
+			return true
+		}
 	}
-	return env
+
+	return false
 }

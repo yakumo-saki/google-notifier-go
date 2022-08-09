@@ -24,7 +24,7 @@ func InitializeLogger() {
 	}
 
 	zerolog.TimeFieldFormat = time.RFC3339Nano
-	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: "2006-01-02 15:04:05.000"}
+	output := zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: "2006-01-02 15:04:05.000"}
 
 	log.Logger = zerolog.New(output).With().Timestamp().Caller().Logger()
 

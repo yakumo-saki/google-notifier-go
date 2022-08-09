@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/grandcat/zeroconf"
+	"github.com/yakumo-saki/google-notifier-go/src/config"
 )
 
 func Scan() {
@@ -44,6 +45,11 @@ func Scan() {
 			fmt.Printf("(%d) %s", i, ip)
 		}
 		fmt.Printf("]")
+
+		if config.IsIgnoredInstance(ent.Instance) {
+			fmt.Printf(" *Ignored*")
+		}
+
 		fmt.Printf("\n")
 	}
 
