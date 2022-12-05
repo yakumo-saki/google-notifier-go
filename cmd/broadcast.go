@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -39,5 +35,5 @@ func init() {
 }
 
 func broadcast() {
-	mdnsclient.Scan()
+	mdnsclient.Scan(false)
 }

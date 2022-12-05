@@ -31,5 +31,5 @@ func init() {
 }
 
 func scan() {
-	mdnsclient.Scan()
+	mdnsclient.Scan(true)
 }

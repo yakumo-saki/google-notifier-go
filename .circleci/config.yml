@@ -1,0 +1,41 @@
+version: 2.1
+jobs:
+  build:
+    resource_class: medium
+    docker:
+      # https://github.com/CircleCI-Public/cimg-go
+      - image: cimg/go:1.19
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Install Dependencies
+          command: go get ./...
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "~/go/pkg/mod"
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            # download test reporter as a static binary
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter before-build
+      - run:
+          name: Run tests
+          command: |
+            go test -coverpkg . -coverprofile c.out ./test/...
+      - run:
+          name: Send test result
+          command: |
+            fullModName=`cat go.mod | grep module | sed -e "s/module //"`
+            mkdir -p ~/$fullModName
+            cp -raT ./ ~/$fullModName/
+            cp c.out cc-test-reporter ~
+            cp -a .git ~
+            cd ~
+            ./cc-test-reporter after-build

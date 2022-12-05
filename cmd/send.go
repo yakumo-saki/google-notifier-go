@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -15,7 +11,7 @@ var sendCmd = &cobra.Command{
 	Long: `Send notification to single device.
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-
+		send(args[0], args[1])
 	},
 }
 

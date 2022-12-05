@@ -10,7 +10,7 @@ import (
 	"github.com/yakumo-saki/google-notifier-go/src/config"
 )
 
-func Scan() {
+func Scan(withPrint bool) []*zeroconf.ServiceEntry {
 	// Discover all services on the network (e.g. _workstation._tcp)
 	resolver, err := zeroconf.NewResolver(nil)
 	if err != nil {
@@ -36,21 +36,35 @@ func Scan() {
 	l.Info().Msgf("Wait for mDNS reply...")
 	<-ctx.Done()
 
+	services := make([]*zeroconf.ServiceEntry, 0, entries.Len())
 	for e := entries.Front(); e != nil; e = e.Next() {
 		ent := e.Value.(*zeroconf.ServiceEntry)
-		fmt.Printf("Instance: %s", ent.Instance)
-		fmt.Printf(" Hostname: %s", ent.HostName)
-		fmt.Printf(" IP4: [")
-		for i, ip := range ent.AddrIPv4 {
-			fmt.Printf("(%d) %s", i, ip)
+		if withPrint {
+			printServiceEntry(ent)
 		}
-		fmt.Printf("]")
 
 		if config.IsIgnoredInstance(ent.Instance) {
-			fmt.Printf(" *Ignored*")
+			continue
 		}
 
-		fmt.Printf("\n")
+		services = append(services, ent)
 	}
 
+	return services
+}
+
+func printServiceEntry(service *zeroconf.ServiceEntry) {
+	fmt.Printf("Instance: %s", service.Instance)
+	fmt.Printf(" Hostname: %s", service.HostName)
+	fmt.Printf(" IP4: [")
+	for i, ip := range service.AddrIPv4 {
+		fmt.Printf("(%d) %s", i, ip)
+	}
+	fmt.Printf("]")
+
+	if config.IsIgnoredInstance(service.Instance) {
+		fmt.Printf(" *Ignored*")
+	}
+
+	fmt.Printf("\n")
 }

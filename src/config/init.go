@@ -18,11 +18,11 @@ var Config ConfigStruct
 func Initialize() {
 	Config = ConfigStruct{}
 
-	envconfig.AddPath(configOnExecDir())
-	envconfig.AddPath(configOnHomeDir())
+	ec := envconfig.New()
+	ec.AddPath(configOnExecDir())
+	ec.AddPath(configOnHomeDir())
 
-	envconfig.EnableLogWithDefaultLogger()
-	err := envconfig.LoadConfig(&Config)
+	err := ec.LoadConfig(&Config)
 	if err != nil {
 		panic("config load error" + err.Error())
 	}
@@ -45,8 +45,4 @@ func configOnHomeDir() string {
 	}
 	homedir := fmt.Sprintf("%s/%s", home, CONFIG_FILE)
 	return homedir
-}
-
-func Load() {
-
 }

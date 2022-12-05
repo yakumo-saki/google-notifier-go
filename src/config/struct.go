@@ -12,5 +12,5 @@ type TtsConfig struct {
 
 type DeviceConfig struct {
 	ScanSecond        int      `cfg:"SCAN_SECOND"`
-	ExcludeByInstance []string `cfg:"EXCLUDE_INSTANCE_,mergeslice"`
+	ExcludeByInstance []string `cfg:"EXCLUDE_INSTANCE_,merge"`
 }
